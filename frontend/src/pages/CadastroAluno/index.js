@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 // components
 import { TextField, Button } from '@material-ui/core';
-import { useHistory } from "react-router-dom";
-
+import { useHistory } from 'react-router-dom';
 
 //services
 import api from '../../services/api';
@@ -19,7 +18,6 @@ const CadatroAluno = () => {
   const [estado, setEstado] = useState('');
   const history = useHistory();
 
-
   async function handleRegister(e) {
     e.preventDefault();
 
@@ -28,24 +26,26 @@ const CadatroAluno = () => {
       email,
       cep,
       cidade,
-      estado
+      estado,
     };
 
     try {
-      const response = await api.post('aluno', data);
-      history.push('/');
+      const res = await api.post('alunos', data);
+      console.log('Foi ' + res);
+      history.push('/admin');
     } catch (err) {
-      alert("Erro no cadastro" + err);
+      alert('Erro no cadastro' + err);
     }
   }
 
   return (
     <Container>
+      <Button href="/admin" secondary>
+        Voltar
+      </Button>
       <InitialText>Cadastro</InitialText>
 
-      <form
-        onSubmit={handleRegister}
-      >
+      <form onSubmit={handleRegister}>
         <TextField
           value={nome}
           onChange={event => {

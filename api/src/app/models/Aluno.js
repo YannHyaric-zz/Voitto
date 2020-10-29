@@ -4,11 +4,26 @@ class Aluno extends Model {
   static init(sequelize) {
     super.init(
       {
-        nome: DataTypes.STRING,
-        email: DataTypes.STRING,
-        cep: DataTypes.STRING,
-        cidade: DataTypes.STRING,
-        estado: DataTypes.STRING
+        nome: {
+          type: DataTypes.STRING,
+          defaultValue: ""
+        },
+        email:{
+          type: DataTypes.STRING,
+          defaultValue: ""
+        },
+        cep: {
+          type: DataTypes.STRING,
+          defaultValue: ""
+        },
+        cidade: {
+          type: DataTypes.STRING,
+          defaultValue: ""
+        },
+        estado: {
+          type: DataTypes.STRING,
+          defaultValue: ""
+        }
       },
       {
         sequelize,

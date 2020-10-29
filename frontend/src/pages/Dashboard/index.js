@@ -34,7 +34,22 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  async function handleModification() {}
+  async function handleModification(data) {
+    try {
+      const { id } = data;
+      const response = await api.put(`/alunos/${id}`);
+    } catch(e) {
+      alert('Erro no update: '+e);
+    }
+  }
+
+  async function handleDelete(id) {
+    try {
+      const response = await api.delete(`/alunos/${id}`);
+    } catch(e) {
+      alert('Erro no update: '+e);
+    }
+  }
 
   const render_modal_info_alunos = () => (
     <Modal open={modalInfos} onClose={() => setModalInfos(false)} closeIcon>
@@ -58,22 +73,11 @@ const Dashboard = () => {
           <Icon name="remove" /> Cancelar
         </Button>
         <Button color="green">
-          <Icon name="checkmark" onClick={() => handleModification} /> Salvar
+          <Icon name="checkmark" onClick={() => handleModification(currentInfo)} /> Salvar
         </Button>
       </Modal.Actions>
     </Modal>
   );
-
-  async function delete_aluno(data_aluno){
-    const {id} = data_aluno
-    try {
-      await api.delete(`aluno/${id}`, {
-      });
-      setAlunos(alunos.filter((aluno) => aluno.id !== id));
-    } catch (err) {
-      alert("Erro no cadastro" + err);
-    }
-  }
 
   function open_info_alunos(data_aluno) {
     console.log(data_aluno);
@@ -98,7 +102,11 @@ const Dashboard = () => {
         />
         <Popup
           trigger={
-            <Button icon="close" negative onClick={() => delete_aluno(data_aluno)} />
+            <Button
+              icon="close"
+              negative
+              onClick={() => handleDelete(data_aluno.id)}
+            />
           }
           content="Excluir aluno"
           basic
