@@ -4,7 +4,8 @@ class CursoAluno extends Model {
   static init(sequelize) {
     super.init(
       {
-        id_aluno
+        id_aluno,
+        id_curso
       },
       {
         sequelize,

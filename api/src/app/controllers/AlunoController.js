@@ -7,8 +7,13 @@ class AlunoController {
   }
 
   async read(req, res) {
-    // TODO
-  }
+    try {
+      const id = req.params.id;
+      const aluno=await Aluno.findById(id);
+      return res.status(200).json({ aluno, message: 'Student has been found' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }  }
 
   async create(req, res) {
     const { nome, email, cep, cidade, estado } = req.body;
@@ -26,12 +31,30 @@ class AlunoController {
   }
 
   async update(req, res) {
-    // TODO
+    try {
+      const update = req.body;
+      const id = req.params.id;
+
+      const aluno = await Aluno.findByIdAndUpdate(
+        id,
+        { $set: update },
+        { new: true }
+      );
+
+      return res.status(200).json({ aluno, message: 'Student has been updated' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
 
   async delete(req, res) {
-    const {id} = req.params;
-    const aluno = await Aluno.deleteById(id);
+    try {
+      const id = req.params.id;
+      await Aluno.findByIdAndDelete(id);
+      res.status(200).json({ message: "Aluno has been deleted" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
 }
 
