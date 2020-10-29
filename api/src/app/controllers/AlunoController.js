@@ -12,9 +12,9 @@ class AlunoController {
 
   async create(req, res) {
     const { nome, email, cep, cidade, estado } = req.body;
-    const aluno = req.headers.authorization;
+    const id_aluno = req.headers.authorization;
 
-    const [id_aluno] = await conect('incidents').insert({
+    const [id] = await conect('aluno').insert({
       nome,
       email,
       cep,
@@ -22,7 +22,7 @@ class AlunoController {
       estado,
       id_aluno
     });
-    return response.json({ id });
+    return res.json({ id });
   }
 
   async update(req, res) {
@@ -30,7 +30,8 @@ class AlunoController {
   }
 
   async delete(req, res) {
-    // TODO
+    const {id} = req.params;
+    const aluno = await Aluno.deleteById(id);
   }
 }
 

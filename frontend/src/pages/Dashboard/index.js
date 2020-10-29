@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
 // components
-import { Table, Button, Popup, Modal, Header, Icon, Form } from 'semantic-ui-react'
+import {
+  Table,
+  Button,
+  Popup,
+  Modal,
+  Header,
+  Icon,
+  Form,
+} from 'semantic-ui-react';
 
 //services
 import api from '../../services/api';
@@ -14,9 +22,9 @@ const Dashboard = () => {
   const [currentInfo, setCurrentInfo] = useState([]);
   const [modalInfos, setModalInfos] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     async function fetchData() {
-      try{
+      try {
         const response = await api.get('/alunos');
         setAlunos(response.data);
       } catch {
@@ -24,65 +32,91 @@ const Dashboard = () => {
       }
     }
     fetchData();
-  }, [])
+  }, []);
+
+  async function handleModification() {}
 
   const render_modal_info_alunos = () => (
-    <Modal open={modalInfos} onClose={()=>setModalInfos(false)} closeIcon>
-    <Header content={`Editando informações de ${currentInfo.nome}`} />
-    <Modal.Content>
-      <Form>
-        <Form.Group widths='equal'>
-          <Form.Input fluid label='Nome' placeholder='Nome' />
-          <Form.Input fluid label='Email' placeholder='Email' />
-          <Form.Input fluid label='CEP' placeholder='CEP' />
-        </Form.Group>
-      </Form>
-    </Modal.Content>
-    <Modal.Actions>
-      <Button onClick={()=>setModalInfos(false)} color='red'>
-        <Icon name='remove' /> Cancelar
-      </Button>
-      <Button color='green'>
-        <Icon name='checkmark' /> Salvar
-      </Button>
-    </Modal.Actions>
-  </Modal>
-  )
+    <Modal open={modalInfos} onClose={() => setModalInfos(false)} closeIcon>
+      <Header content={`Editando informações de ${currentInfo.nome}`} />
+      <Modal.Content>
+        <Form>
+          <Form.Group widths="equal">
+            <Form.Input
+              fluid
+              label="Nome"
+              placeholder="Nome"
+              onChange={event => {}}
+            />
+            <Form.Input fluid label="Email" placeholder="Email" />
+            <Form.Input fluid label="CEP" placeholder="CEP" />
+          </Form.Group>
+        </Form>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button onClick={() => setModalInfos(false)} color="red">
+          <Icon name="remove" /> Cancelar
+        </Button>
+        <Button color="green">
+          <Icon name="checkmark" onClick={() => handleModification} /> Salvar
+        </Button>
+      </Modal.Actions>
+    </Modal>
+  );
 
-  function open_info_alunos(data_aluno){
-    console.log(data_aluno)
-    setCurrentInfo(data_aluno)
-    setModalInfos(true)
+  async function delete_aluno(data_aluno){
+    const {id} = data_aluno
+    try {
+      await api.delete(`aluno/${id}`, {
+      });
+      setAlunos(alunos.filter((aluno) => aluno.id !== id));
+    } catch (err) {
+      alert("Erro no cadastro" + err);
+    }
   }
 
-  function render_actions(data_aluno){
-    return <center>
-      <Popup
-        trigger={<Button icon='edit' onClick={()=>open_info_alunos(data_aluno)} />}
-        content="Editar informações"
-        basic
-      />
-      <Popup
-        trigger={<Button icon='plus' positive />}
-        content="Adicionar curso para aluno"
-        basic
-      />
-      <Popup
-        trigger={<Button icon='close' negative />}
-        content="Excluir aluno"
-        basic
-      />
-    </center>
+  function open_info_alunos(data_aluno) {
+    console.log(data_aluno);
+    setCurrentInfo(data_aluno);
+    setModalInfos(true);
   }
 
-  function render_alunos(){
-    return alunos.map((v)=><Table.Row>
-      <Table.Cell>{v.id}</Table.Cell>
-      <Table.Cell>{v.nome}</Table.Cell>
-      <Table.Cell>{v.email}</Table.Cell>
-      <Table.Cell>{v.cep}</Table.Cell>
-      <Table.Cell>{render_actions(v)}</Table.Cell>
-    </Table.Row>)
+  function render_actions(data_aluno) {
+    return (
+      <center>
+        <Popup
+          trigger={
+            <Button icon="edit" onClick={() => open_info_alunos(data_aluno)} />
+          }
+          content="Editar informações"
+          basic
+        />
+        <Popup
+          trigger={<Button icon="plus" positive />}
+          content="Adicionar curso para aluno"
+          basic
+        />
+        <Popup
+          trigger={
+            <Button icon="close" negative onClick={() => delete_aluno(data_aluno)} />
+          }
+          content="Excluir aluno"
+          basic
+        />
+      </center>
+    );
+  }
+
+  function render_alunos() {
+    return alunos.map(v => (
+      <Table.Row>
+        <Table.Cell>{v.id}</Table.Cell>
+        <Table.Cell>{v.nome}</Table.Cell>
+        <Table.Cell>{v.email}</Table.Cell>
+        <Table.Cell>{v.cep}</Table.Cell>
+        <Table.Cell>{render_actions(v)}</Table.Cell>
+      </Table.Row>
+    ));
   }
 
   return (
@@ -99,12 +133,20 @@ const Dashboard = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          { alunos.length > 0 ? render_alunos() : <h2>Nenhum dado registrado </h2> }
+          {alunos.length > 0 ? (
+            render_alunos()
+          ) : (
+            <h2>Nenhum dado registrado </h2>
+          )}
         </Table.Body>
       </Table>
       {render_modal_info_alunos()}
-      <Button primary>Adicionar aluno</Button>
-      <Button href="/" secondary>Ver instruções</Button>
+      <Button href="/cadastro" primary>
+        Adicionar aluno
+      </Button>
+      <Button href="/" secondary>
+        Ver instruções
+      </Button>
     </Container>
   );
 };
