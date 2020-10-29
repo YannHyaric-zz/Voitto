@@ -14,8 +14,9 @@ routes.put('/alunos/:id',celebrate({
     [Segments.BODY]: Joi.object().keys({
         nome: Joi.string().required(),
         email: Joi.string().required().email(),
-        whatsapp: Joi.string().required().min(10).max(15), 
-        endereco: Joi.string()
+        cep:Joi.string().required().min(10).max(12),
+        cidade:Joi.string();
+        estado:Joi.string().required().min(1).max(2)
     })
 }), AlunoController.update);
 routes.delete('/alunos/:id', AlunoController.delete);

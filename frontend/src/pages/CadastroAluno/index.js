@@ -104,6 +104,8 @@ const CadatroAluno = () => {
           }}
           id="estado"
           label="estado"
+          maxLength={2}
+
           variant="outlined"
           margin="normal"
           fullWidth

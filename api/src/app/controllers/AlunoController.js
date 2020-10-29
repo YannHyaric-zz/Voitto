@@ -16,12 +16,14 @@ class AlunoController {
     }
   }
 
-  async create(req, res) {
-    const { nome, email, cep, cidade, estado } = req.body;
-    
+  async create(req, res) {    
+    try{
     const newAluno = new Aluno({ ...req.body});
     const user_ = await newAluno.save();
     return res.json({ user_ });
+  }catch(e){
+    res.status(500).json({ message: e.message });
+  }
   }
 
   async update(req, res) {
