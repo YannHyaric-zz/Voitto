@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import EditarAluno from '../EditarAluno'
 
 // components
 import {
@@ -20,7 +21,8 @@ import { Container, InitialText } from './styles';
 const Dashboard = () => {
   const [alunos, setAlunos] = useState([]);
   const [currentInfo, setCurrentInfo] = useState([]);
-  const [modalInfos, setModalInfos] = useState(false);
+  const [modalInfosAluno, setModalInfos] = useState(false);
+  const [modalInfosCurso, setModalInfosCurso] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -38,21 +40,27 @@ const Dashboard = () => {
     try {
       const { id } = data;
       const response = await api.put(`/alunos/${id}`);
-    } catch(e) {
-      alert('Erro no update: '+e);
+      console.log(response);
+    } catch (e) {
+      alert('Erro no update: ' + e);
     }
   }
 
   async function handleDelete(id) {
     try {
       const response = await api.delete(`/alunos/${id}`);
-    } catch(e) {
-      alert('Erro no update: '+e);
+      console.log(response);
+    } catch (e) {
+      alert('Erro no delete: ' + e);
     }
   }
 
   const render_modal_info_alunos = () => (
-    <Modal open={modalInfos} onClose={() => setModalInfos(false)} closeIcon>
+    <Modal
+      open={modalInfosAluno}
+      onClose={() => setModalInfos(false)}
+      closeIcon
+    >
       <Header content={`Editando informações de ${currentInfo.nome}`} />
       <Modal.Content>
         <Form>
@@ -61,10 +69,26 @@ const Dashboard = () => {
               fluid
               label="Nome"
               placeholder="Nome"
-              onChange={event => {}}
+              onChange={event => {
+                currentInfo.nome = event.target.value;
+              }}
             />
-            <Form.Input fluid label="Email" placeholder="Email" />
-            <Form.Input fluid label="CEP" placeholder="CEP" />
+            <Form.Input
+              fluid
+              label="Email"
+              placeholder="Email"
+              onChange={event => {
+                currentInfo.email = event.target.value;
+              }}
+            />
+            <Form.Input
+              fluid
+              label="CEP"
+              placeholder="CEP"
+              onChange={event => {
+                currentInfo.cep = event.target.value;
+              }}
+            />
           </Form.Group>
         </Form>
       </Modal.Content>
@@ -73,7 +97,11 @@ const Dashboard = () => {
           <Icon name="remove" /> Cancelar
         </Button>
         <Button color="green">
-          <Icon name="checkmark" onClick={() => handleModification(currentInfo)} /> Salvar
+          <Icon
+            name="checkmark"
+            onClick={() => handleModification(currentInfo)}
+          />{' '}
+          Salvar
         </Button>
       </Modal.Actions>
     </Modal>
@@ -81,9 +109,12 @@ const Dashboard = () => {
 
   function open_info_alunos(data_aluno) {
     console.log(data_aluno);
+    EditarAluno(data_aluno);
     setCurrentInfo(data_aluno);
     setModalInfos(true);
   }
+
+  
 
   function render_actions(data_aluno) {
     return (

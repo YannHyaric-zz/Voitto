@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // components
 import { TextField, Button } from '@material-ui/core';
@@ -31,7 +31,7 @@ const CadatroAluno = () => {
 
     try {
       const res = await api.post('alunos', data);
-      console.log('Foi ' + res);
+      console.log('Aluno ' + res);
       history.push('/admin');
     } catch (err) {
       alert('Erro no cadastro' + err);
