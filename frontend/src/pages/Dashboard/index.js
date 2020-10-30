@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import EditarAluno from '../EditarAluno'
+import { useHistory } from 'react-router-dom';
 
 // components
 import {
@@ -22,7 +22,7 @@ const Dashboard = () => {
   const [alunos, setAlunos] = useState([]);
   const [currentInfo, setCurrentInfo] = useState([]);
   const [modalInfosAluno, setModalInfos] = useState(false);
-  const [modalInfosCurso, setModalInfosCurso] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     async function fetchData() {
@@ -107,14 +107,20 @@ const Dashboard = () => {
     </Modal>
   );
 
+  function handleAddCurso(id) {
+    try {
+      localStorage.setItem('Aluno_id', id);
+      history.push('/cursos');
+    }catch(e) {
+      alert("Erro na Adição de curso: "+e);
+    }
+  }
+
   function open_info_alunos(data_aluno) {
     console.log(data_aluno);
-    EditarAluno(data_aluno);
     setCurrentInfo(data_aluno);
     setModalInfos(true);
   }
-
-  
 
   function render_actions(data_aluno) {
     return (
@@ -127,7 +133,13 @@ const Dashboard = () => {
           basic
         />
         <Popup
-          trigger={<Button icon="plus" positive />}
+          trigger={
+            <Button
+              icon="plus"
+              positive
+              onclick={() => handleAddCurso(data_aluno.id)}
+            />
+          }
           content="Adicionar curso para aluno"
           basic
         />
