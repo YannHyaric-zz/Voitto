@@ -18,6 +18,8 @@ import api from '../../services/api';
 // styles
 import { Container, InitialText } from './styles';
 
+import AdicionaCurso from '../AdicionaCurso';
+
 const Dashboard = () => {
   const [alunos, setAlunos] = useState([]);
   const [currentInfo, setCurrentInfo] = useState([]);
@@ -108,12 +110,7 @@ const Dashboard = () => {
   );
 
   function handleAddCurso(id) {
-    try {
-      localStorage.setItem('Aluno_id', id);
-      history.push('/cursos');
-    }catch(e) {
-      alert("Erro na Adição de curso: "+e);
-    }
+    AdicionaCurso(id);
   }
 
   function open_info_alunos(data_aluno) {

@@ -10,7 +10,7 @@ import api from '../../services/api';
 // styles
 import { Container, InitialText } from './styles';
 
-const AdicionaCurso = () => {
+const AdicionaCurso = (id) => {
   const history = useHistory();
 
   async function handleAdd(e) {
@@ -23,7 +23,7 @@ const AdicionaCurso = () => {
       <Button href="/admin" secondary>
         Voltar
       </Button>
-      <InitialText>Cadastro</InitialText>
+      <InitialText>Adicionar curso</InitialText>
 
       
     </Container>
